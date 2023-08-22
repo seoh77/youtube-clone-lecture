@@ -4,23 +4,33 @@ const PORT = 4000;
 
 const app = express();
 
-// 사실 controller에는 req, res 외에 next라는 argument도 있으며, 이는 다음 함수를 호출해주는 역할을 한다.
-const gossipMiddleware = (req, res, next) => {
-  console.log(`Someone is going to: ${req.url}`);
-  // return res.send("lalala") -> 만약 이렇게 next() 전에 return 된다면 next()는 실행되지 않아 handleHome 함수도 실행되지 않는다.
+const logger = (req, res, next) => {
+  console.log(`${req.method} ${req.url}`);
+  next();
+};
+
+const privateMiddleware = (req, res, next) => {
+  const url = req.url;
+  if (url === "/protected") {
+    return res.send("<h1>Not Allowed</h1>");
+  }
+  console.log("Allowed, you may continue.");
   next();
 };
 
 const handleHome = (req, res) => {
-  return res.end();
+  return res.send("I love middlewares");
 };
 
-const handleLogin = (req, res) => {
-  return res.send("<h1>Login here.</h1>");
+const handleProtected = (req, res) => {
+  return res.send("Welcome to the private lounge.");
 };
 
-app.get("/", gossipMiddleware, handleHome); // gossipMiddleware controller에 next()가 있기 때문에 gossipMiddleware가 실행된 후 그 다음 함수인 handleHome이 실행됨
-app.get("/login", handleLogin);
+// express는 위에서부터 아래로 진행되기 때문에 순서가 중요하다. use가 먼저 오고, 그 다음에 url의 get이 와야한다.
+app.use(logger); // middleware을 가장 위에다 두면 모든 route에 적용된다.
+app.use(privateMiddleware);
+app.get("/", handleHome);
+app.get("/protected", handleProtected);
 
 const handleListening = () =>
   console.log(`✅ Server listenting on port http://localhost:${PORT} 🚀`);
