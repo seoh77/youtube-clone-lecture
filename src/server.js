@@ -2,27 +2,27 @@ import express from "express";
 
 const PORT = 4000;
 
-const app = express(); // application을 만들기
+const app = express();
 
-// express와 연과된 코드들은 express application을 만들어진 후에 코드를 작성해야 한다.
-// application을 만들고 외부접속을 listen하는 가운데 부분에 application을 설정을 한다.
+// 사실 controller에는 req, res 외에 next라는 argument도 있으며, 이는 다음 함수를 호출해주는 역할을 한다.
+const gossipMiddleware = (req, res, next) => {
+  console.log(`Someone is going to: ${req.url}`);
+  // return res.send("lalala") -> 만약 이렇게 next() 전에 return 된다면 next()는 실행되지 않아 handleHome 함수도 실행되지 않는다.
+  next();
+};
 
-// app.get("어떤 route", callback 함수) 이때, callback은 반드시 함수로 보내야 한다.
-
-// express의 route handler에서는 req, res object를 받아올 수 있다. (바닐라JS에서 event를 받아왔던 것처럼)
 const handleHome = (req, res) => {
-  return res.end(); // request를 종료하는 응답을 return
+  return res.end();
 };
 
 const handleLogin = (req, res) => {
-  return res.send("<h1>Login here.</h1>"); // 해당 내용을 화면에 보내는 응답을 return
+  return res.send("<h1>Login here.</h1>");
 };
-app.get("/", handleHome);
-app.get("/login", handleLogin);
 
-// 위의 내용을 app.get("/", () => console.log("Somebody is trying to go home.")); 로 적는 것도 가능하다.
+app.get("/", gossipMiddleware, handleHome); // gossipMiddleware controller에 next()가 있기 때문에 gossipMiddleware가 실행된 후 그 다음 함수인 handleHome이 실행됨
+app.get("/login", handleLogin);
 
 const handleListening = () =>
   console.log(`✅ Server listenting on port http://localhost:${PORT} 🚀`);
 
-app.listen(PORT, handleListening); // 외부접속을 listen
+app.listen(PORT, handleListening);
