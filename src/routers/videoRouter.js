@@ -3,9 +3,9 @@ import { upload, see, edit, deleteVideo } from "../controllers/videoController";
 
 const videoRouter = express.Router();
 
-videoRouter.get("/upload", upload); // upload가 :id보다 아래에 있으면 'upload'를 :id의 값이라고 판단해버린다.
-videoRouter.get("/:id", see);
-videoRouter.get("/:id/edit", edit);
-videoRouter.get("/:id/delete", deleteVideo);
+videoRouter.get("/:id(\\d+)", see); // '\d+'는 id값을 숫자로 제한하는 역할을 한다.
+videoRouter.get("/:id(\\d+)/edit", edit);
+videoRouter.get("/:id(\\d+)/delete", deleteVideo);
+videoRouter.get("/upload", upload); // 정규식을 사용하여 이젠 :id 아래에 /upload가 있어도 문제없다.
 
 export default videoRouter;
