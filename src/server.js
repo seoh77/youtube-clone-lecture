@@ -9,8 +9,9 @@ const PORT = 4000;
 const app = express();
 const logger = morgan("dev");
 
+app.set("view engine", "pug");
+app.set("views", process.cwd() + "/src/views");
 app.use(logger);
-
 app.use("/", globalRouter);
 app.use("/videos", videoRouter); // 누군가가 "/videos"로 시작하는 url에 접근하면 videoRouter에 있는 컨트롤러를 찾게 하는 역할
 app.use("/users", userRouter);
