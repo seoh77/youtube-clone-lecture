@@ -32,9 +32,20 @@ export const trending = (req, res) => {
 export const watch = (req, res) => {
   const { id } = req.params; // const id = req.params.id를 ES6를 사용하면 const { id } = req.params 으로 나타낼 수 있다.
   const video = videos[id - 1]; // 컴퓨터는 0부터 숫자를 세니까 -1을 해줘야 한다. 아니면 아예 videos object에 id값을 0부터 설정해줘도 된다.
-  return res.render("watch", { pageTitle: `Watching ${video.title}`, video });
+  return res.render("watch", { pageTitle: `Watching: ${video.title}`, video });
 };
-export const edit = (req, res) => res.render("edit");
-export const search = (req, res) => res.send("Search");
-export const upload = (req, res) => res.send("Upload");
-export const deleteVideo = (req, res) => res.send("Delete Video");
+
+// getEdit : 화면에 보여주는 역할
+export const getEdit = (req, res) => {
+  const { id } = req.params;
+  const video = videos[id - 1];
+  return res.render("edit", { pageTitle: `Editing: ${video.title}`, video });
+};
+
+// postEdit : 변경사항을 저장해주는 역할
+export const postEdit = (req, res) => {
+  const { id } = req.params;
+  const { title } = req.body; // const title = req.body.title 과 같은 의미
+  videos[id - 1].title = title; // 진짜 DB가 아니라 가짜 DB이기 때문에 우선 이렇게 새로 입력받은 title을 업데이트 해준다.
+  return res.redirect(`/videos/${id}`); // 브라우저가 설정한 주소로 redirect(자동으로 이동)된다.
+};

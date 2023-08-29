@@ -1,4 +1,9 @@
 extends base.pug
 
 block content
-    h1 Edit Video
+    h4 Change Title of video
+    //- form의 action에는 이 데이터를 보낼 곳을 적는다.
+    //- 하지만 현재는 form이 있는 곳과 똑같은 url (edit페이지) 에 데이터를 보내고 싶으니까 해당 action 부분을 지워주고 method 방법을 post로 바꾼다.
+    form(method="POST")  
+        input(name="title", placeholder="Video Title", value=video.title, required)
+        input(value="Save", type="submit")
