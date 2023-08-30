@@ -1,3 +1,4 @@
+import "./db"; // 파일 그 자체를 import
 import express from "express";
 import morgan from "morgan";
 import globalRouter from "./routers/globalRouter";
