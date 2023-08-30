@@ -49,3 +49,23 @@ export const postEdit = (req, res) => {
   videos[id - 1].title = title; // 진짜 DB가 아니라 가짜 DB이기 때문에 우선 이렇게 새로 입력받은 title을 업데이트 해준다.
   return res.redirect(`/videos/${id}`); // 브라우저가 설정한 주소로 redirect(자동으로 이동)된다.
 };
+
+export const getUpload = (req, res) => {
+  // 비디오 영상을 하나 더 업로드
+  return res.render("upload", { pageTitle: "Upload Video" });
+};
+
+export const postUpload = (req, res) => {
+  // 위에서 업로드한 비디오를 videos array에 추가
+  const { title } = req.body;
+  const newVideo = {
+    title, // 위에서 title 값을 가져옴
+    rating: 0,
+    comments: 0,
+    createdAt: "just now",
+    views: 0,
+    id: videos.length + 1,
+  };
+  videos.push(newVideo); // 원래 videos에 새로 입력한 newVideo를 넣어줌
+  return res.redirect("/");
+};
