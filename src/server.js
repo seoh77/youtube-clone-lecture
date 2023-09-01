@@ -1,4 +1,5 @@
 import "./db"; // 파일 그 자체를 import
+import "./models/Video"; // db를 import해서 연결시킨 후, 해당 연결이 성공적일 때 video를 import 해주면 db가 video model을 인지하게 된다.
 import express from "express";
 import morgan from "morgan";
 import globalRouter from "./routers/globalRouter";
