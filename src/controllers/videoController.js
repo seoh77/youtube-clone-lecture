@@ -38,9 +38,7 @@ export const postEdit = async (req, res) => {
   await Video.findByIdAndUpdate(id, {
     title,
     description,
-    hashtags: hashtags
-      .split(",")
-      .map((word) => (word.startsWith("#") ? word : `#${word}`)),
+    hashtags,
   });
   return res.redirect(`/videos/${id}`);
 };
@@ -56,7 +54,7 @@ export const postUpload = async (req, res) => {
     await Video.create({
       title, // title : title 로 적는 것과 같은 의미다.
       description,
-      hashtags: hashtags.split(",").map((word) => `#${word}`), // 콤마(,)를 기준으로 각 단어를 분리하고 단어 앞에 #을 붙여준다.
+      hashtags,
     });
     return res.redirect("/");
   } catch (error) {
