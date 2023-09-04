@@ -65,3 +65,11 @@ export const postUpload = async (req, res) => {
     });
   }
 };
+
+export const deleteVideo = async (req, res) => {
+  const { id } = req.params;
+  await Video.findByIdAndDelete(id);
+  // findOneAndDelete와 findOneAndRemove는 약간 다른점이 있긴 하지만, 쓰면 안 되는 특별한 이유가 있지 않는 이상 findOneAndDelete를 사용한다.
+  // findByIdAndDelete(id)는 findOneAndDelete({_id:id})를 간단하게 줄인 것이다.
+  return res.redirect("/");
+};

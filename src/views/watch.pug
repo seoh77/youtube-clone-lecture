@@ -5,5 +5,5 @@ block content
         p=video.description
         small=video.createdAt
     a(href=`${video.id}/edit`) Edit Video &rarr;
-    //- '/edit'처럼 href 앞부분에 /를 넣으면 어느 경로에 있든 상관없이 root경로+/edit으로 이동하게 된다.
-    //- 'edit'으로 적으면 relative url이 되어서 끝부분만 edit으로 변경된 경로로 이동된다.
+    br
+    a(href=`${video.id}/delete`) Delete  Video &rarr;
