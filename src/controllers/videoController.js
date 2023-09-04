@@ -29,8 +29,18 @@ export const getUpload = (req, res) => {
 };
 
 export const postUpload = (req, res) => {
-  // 위에서 업로드한 비디오를 videos array에 추가
-  const { title } = req.body;
-
+  const { title, description, hashtags } = req.body;
+  // document(= 데이터를 가진 비디오) 만들기
+  const video = new Video({
+    title, // title : title 로 적는 것과 같은 의미다.
+    description,
+    createdAt: Date.now(), // Date.now()는 1970년도부터 현재까지의 milliseconds를 반환한다.
+    hashtags: hashtags.split(",").map((word) => `#${word}`), // 콤마(,)를 기준으로 각 단어를 분리하고 단어 앞에 #을 붙여준다.
+    meta: {
+      views: 0,
+      rating: 0,
+    },
+  });
+  console.log(video);
   return res.redirect("/");
 };
