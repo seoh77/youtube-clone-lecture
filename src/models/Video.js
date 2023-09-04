@@ -1,8 +1,7 @@
 import mongoose from "mongoose";
 
 // model의 형태 정의 (데이터 형식 지정) = schema
-const videoSchema = new mongoose.schema({
-  // 비디오 형식을 지정 (실제 데이터를 넣는 것 X 형식만 지정 O)
+const videoSchema = new mongoose.Schema({
   title: String,
   description: String,
   createdAt: Date,

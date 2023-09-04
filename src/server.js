@@ -1,12 +1,8 @@
-import "./db"; // 파일 그 자체를 import
-import "./models/Video"; // db를 import해서 연결시킨 후, 해당 연결이 성공적일 때 video를 import 해주면 db가 video model을 인지하게 된다.
 import express from "express";
 import morgan from "morgan";
 import globalRouter from "./routers/globalRouter";
 import videoRouter from "./routers/videoRouter";
 import userRouter from "./routers/userRouter";
-
-const PORT = 4000;
 
 const app = express();
 const logger = morgan("dev");
@@ -22,7 +18,6 @@ app.use("/", globalRouter);
 app.use("/videos", videoRouter); // 누군가가 "/videos"로 시작하는 url에 접근하면 videoRouter에 있는 컨트롤러를 찾게 하는 역할
 app.use("/users", userRouter);
 
-const handleListening = () =>
-  console.log(`✅ Server listenting on port http://localhost:${PORT} 🚀`);
-
-app.listen(PORT, handleListening);
+export default app;
+// server.js는 express된 것들과 sever의 configuration에 관련된 코드만 처리해주기 위해서 init.js와 나눠서 정리해줌
+// database나 models 같은 것들을 import하는 건 init.js에서 진행
