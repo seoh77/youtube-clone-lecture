@@ -1,8 +1,9 @@
 extends base.pug
 
 block content
-    h3 #{video.views} #{video.views === 1 ? "view" : "views"}
-    //- 조회수가 1이면 view로 표시되고, 조회수가 1이 아니라면 views로 표시되도록 만들어준다.
+    div 
+        p=video.description
+        small=video.createdAt
     a(href=`${video.id}/edit`) Edit Video &rarr;
     //- '/edit'처럼 href 앞부분에 /를 넣으면 어느 경로에 있든 상관없이 root경로+/edit으로 이동하게 된다.
     //- 'edit'으로 적으면 relative url이 되어서 끝부분만 edit으로 변경된 경로로 이동된다.
