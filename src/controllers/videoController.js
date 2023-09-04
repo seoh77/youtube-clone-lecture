@@ -1,7 +1,7 @@
 import Video from "../models/Video";
 
 export const home = async (req, res) => {
-  const videos = await Video.find({});
+  const videos = await Video.find({}).sort({ createdAt: "asc" }); // sort를 추가해서 정렬 방법을 설정할 수 있다. asc(오름차순) / desc(내림차순)
   return res.render("home", { pageTitle: "Home", videos });
 };
 
@@ -72,4 +72,19 @@ export const deleteVideo = async (req, res) => {
   // findOneAndDelete와 findOneAndRemove는 약간 다른점이 있긴 하지만, 쓰면 안 되는 특별한 이유가 있지 않는 이상 findOneAndDelete를 사용한다.
   // findByIdAndDelete(id)는 findOneAndDelete({_id:id})를 간단하게 줄인 것이다.
   return res.redirect("/");
+};
+
+export const search = async (req, res) => {
+  const { keyword } = req.query;
+  let videos = [];
+  if (keyword) {
+    videos = await Video.find({
+      title: {
+        $regex: new RegExp(keyword, "i"),
+        // $regex: new RegExp(keyword)를 사용함으로써 keyword를 포함한 단어는 모두 검색 된다.
+        // 여기서 i는 대문자와 소문자를 구분하지 않도록 한다. (Weclome이나 weclome이나 모두 검색되도록)
+      },
+    });
+  }
+  return res.render("search", { pageTitle: "Search", videos });
 };
