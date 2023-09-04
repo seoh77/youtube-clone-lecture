@@ -10,7 +10,10 @@ export const watch = async (req, res) => {
   // findOne : 입력한 모든 조건을 적용시켜서 조건을 충족하는 요소를 찾을 수 있다.  -> 예를 들어 조회수가 25인 영상을 찾아라
   // findById : id로 해당 요소를 찾아낼 수 있는 기능
   const video = await Video.findById(id);
-  return res.render("watch", { pageTitle: video.title, video });
+  if (video) {
+    return res.render("watch", { pageTitle: video.title, video });
+  }
+  return res.render("404", { pageTitle: "Video not found." });
 };
 
 // getEdit : 화면에 보여주는 역할
