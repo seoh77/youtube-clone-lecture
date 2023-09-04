@@ -31,16 +31,17 @@ export const getEdit = async (req, res) => {
 export const postEdit = async (req, res) => {
   const { id } = req.params;
   const { title, description, hashtags } = req.body;
-  const video = await Video.findById(id);
+  const video = await Video.exists({ _id: id }); // 굳이 모든 Video를 가져와 검색하지 않고 exists(조건)함수를 사용하면 간단하게 처리할 수 있다.
   if (!video) {
     return res.render("404", { pageTitle: "Video not found." });
   }
-  video.title = title;
-  video.description = description;
-  video.hashtags = hashtags
-    .split(",")
-    .map((word) => (word.startsWith("#") ? word : `#${word}`)); // 만약 단어가 #으로 시작한다면 단어 그대로 return하고, #으로 시작하지 않을 때만 앞에 #을 붙여준다.
-  await video.save();
+  await Video.findByIdAndUpdate(id, {
+    title,
+    description,
+    hashtags: hashtags
+      .split(",")
+      .map((word) => (word.startsWith("#") ? word : `#${word}`)),
+  });
   return res.redirect(`/videos/${id}`);
 };
 
