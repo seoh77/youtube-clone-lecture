@@ -28,10 +28,9 @@ export const getUpload = (req, res) => {
   return res.render("upload", { pageTitle: "Upload Video" });
 };
 
-export const postUpload = (req, res) => {
+export const postUpload = async (req, res) => {
   const { title, description, hashtags } = req.body;
-  // document(= 데이터를 가진 비디오) 만들기
-  const video = new Video({
+  await Video.create({
     title, // title : title 로 적는 것과 같은 의미다.
     description,
     createdAt: Date.now(), // Date.now()는 1970년도부터 현재까지의 milliseconds를 반환한다.
@@ -41,6 +40,5 @@ export const postUpload = (req, res) => {
       rating: 0,
     },
   });
-  console.log(video);
   return res.redirect("/");
 };
