@@ -1,6 +1,8 @@
 extends base
 
 block content
+    if errorMessage
+        span=errorMessage
     form(method="POST")
         //- 모든 input에는 name이 설정되어 있어야 controller에서 req.body.해당name을 사용해서 값을 받아올 수 있다.
         input(placeholder="Title" required type="text" name="title")

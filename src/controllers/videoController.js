@@ -30,15 +30,18 @@ export const getUpload = (req, res) => {
 
 export const postUpload = async (req, res) => {
   const { title, description, hashtags } = req.body;
-  await Video.create({
-    title, // title : title 로 적는 것과 같은 의미다.
-    description,
-    createdAt: Date.now(), // Date.now()는 1970년도부터 현재까지의 milliseconds를 반환한다.
-    hashtags: hashtags.split(",").map((word) => `#${word}`), // 콤마(,)를 기준으로 각 단어를 분리하고 단어 앞에 #을 붙여준다.
-    meta: {
-      views: 0,
-      rating: 0,
-    },
-  });
-  return res.redirect("/");
+  try {
+    await Video.create({
+      title, // title : title 로 적는 것과 같은 의미다.
+      description,
+      hashtags: hashtags.split(",").map((word) => `#${word}`), // 콤마(,)를 기준으로 각 단어를 분리하고 단어 앞에 #을 붙여준다.
+    });
+    return res.redirect("/");
+  } catch (error) {
+    // DB를 저장하는 과정에서 에러가 발생하면 아래 내용이 수행된다.
+    return res.render("upload", {
+      pageTitle: "Upload Video",
+      errorMessage: error._message,
+    });
+  }
 };
