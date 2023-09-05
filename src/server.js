@@ -1,6 +1,7 @@
 import express from "express";
 import morgan from "morgan";
 import session from "express-session";
+import MongoStore from "connect-mongo";
 import globalRouter from "./routers/rootRouter";
 import videoRouter from "./routers/videoRouter";
 import userRouter from "./routers/userRouter";
@@ -23,6 +24,7 @@ app.use(
     secret: "Hello",
     resave: true, // 터미널에서 정의되지 않았다고 뭐가 떠서 추가해줌
     saveUninitialized: true, // 터미널에서 정의되지 않았다고 뭐가 떠서 추가해줌
+    store: MongoStore.create({ mongoUrl: "mongodb://127.0.0.1:27017/youtube" }),
   })
 );
 
