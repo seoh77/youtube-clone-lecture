@@ -64,7 +64,7 @@ export const postLogin = async (req, res) => {
     });
   }
 
-  // 세션에 정보 추가
+  // 세션에 정보 추가 (세션을 initialize(초기화))
   req.session.loggedIn = true;
   req.session.user = user;
 

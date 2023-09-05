@@ -21,10 +21,13 @@ app.use(express.urlencoded({ extended: true }));
 // express-session middleware를 router 앞에서 초기화 해줘야 한다.
 app.use(
   session({
-    secret: "Hello",
-    resave: true, // 터미널에서 정의되지 않았다고 뭐가 떠서 추가해줌
-    saveUninitialized: true, // 터미널에서 정의되지 않았다고 뭐가 떠서 추가해줌
-    store: MongoStore.create({ mongoUrl: "mongodb://127.0.0.1:27017/youtube" }),
+    secret: process.env.COOKIE_SECRET,
+    resave: false, // 터미널에서 정의되지 않았다고 뭐가 떠서 추가해줌
+    saveUninitialized: false, // 세션을 수정할 때만 세션을 DB에 저장하고 쿠키를 넘겨준다.
+    cookie: {
+      maxAge: 10000, // maxAge는 쿠키가 얼마나 오래 있을 수 있는지 알려주는거고, 값은 1/1000초 단위로 쓰면 된다. '10,000 = 10초'
+    },
+    store: MongoStore.create({ mongoUrl: process.env.DB_URL }),
   })
 );
 

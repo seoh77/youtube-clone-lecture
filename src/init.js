@@ -1,5 +1,6 @@
 // init.js는 필요한 모든 것들을 import하는 역할을 담당
 
+import "dotenv/config";
 import "./db";
 import "./models/Video";
 import "./models/User";

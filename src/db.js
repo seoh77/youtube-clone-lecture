@@ -1,7 +1,9 @@
 import mongoose from "mongoose";
 
+console.log(process.env.DB_URL);
+
 // 터미널에서 mongosh를 실행했을 때 얻을 수 있는 connecting url을 입력한 후에 database 이름을 적어주면 된다.
-mongoose.connect("mongodb://127.0.0.1:27017/youtube");
+mongoose.connect(process.env.DB_URL);
 
 const db = mongoose.connection;
 
