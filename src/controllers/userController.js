@@ -1,4 +1,5 @@
 import User from "../models/User";
+import bcrypt from "bcrypt";
 
 export const getJoin = (req, res) => res.render("join", { pageTitle: "Join" });
 export const postJoin = async (req, res) => {
@@ -22,17 +23,51 @@ export const postJoin = async (req, res) => {
     });
   }
 
-  await User.create({
-    name,
-    username,
-    email,
-    password,
-    location,
-  });
-  return res.redirect("/login");
+  // 위에서 에러를 직접 처리하긴 했지만, 생각하지 못한 에러가 남아있을 수도 있으니 try-catch를 사용해서 에러를 대비해야한다.
+  try {
+    await User.create({
+      name,
+      username,
+      email,
+      password,
+      location,
+    });
+    return res.redirect("/login");
+  } catch (error) {
+    return res.status(400).render("join", {
+      pageTitle,
+      errorMessage: error._message,
+    });
+  }
 };
+
+export const getLogin = (req, res) =>
+  res.render("login", { pageTitle: "Login" });
+
+export const postLogin = async (req, res) => {
+  const { username, password } = req.body;
+  const pageTitle = "Login";
+  const user = await User.findOne({ username });
+  if (!user) {
+    return res.status(400).render("login", {
+      pageTitle,
+      errorMessage: "An account with this username does not exists.",
+    });
+  }
+
+  // 비밀번호 맞게 입력했는지 확인
+  const ok = await bcrypt.compare(password, user.password); // bcrypt.compare(로그인에서 입력된 password, DB에 저장되어있는 password)
+  if (!ok) {
+    return res.status(400).render("login", {
+      pageTitle,
+      errorMessage: "Wrong password",
+    });
+  }
+  console.log("LOG USER IN! COMING SOON!");
+  return res.redirect("/");
+};
+
 export const edit = (req, res) => res.send("Edit User");
 export const remove = (req, res) => res.send("Remove User");
-export const login = (req, res) => res.send("Login");
 export const logout = (req, res) => res.send("Logout");
 export const see = (req, res) => res.send("See User");
