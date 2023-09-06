@@ -104,14 +104,50 @@ export const finishGithubLogin = async (req, res) => {
   if ("access_token" in tokenRequest) {
     // access api
     const { access_token } = tokenRequest;
-    const userRequest = await (
-      await fetch("https://api.github.com/user", {
+    const apiUrl = "https://api.github.com";
+    const userData = await (
+      await fetch(`${apiUrl}/user`, {
         headers: {
           Authorization: `token ${access_token}`,
         },
       })
     ).json();
-    console.log(userRequest);
+    // email 정보가 private으로 되어 있어서 null값으로 가져와졌다. 그래서 따로 추가 작업을 해줘야 한다.
+    const emailData = await (
+      await fetch(`${apiUrl}/user/emails`, {
+        headers: {
+          Authorization: `token ${access_token}`,
+        },
+      })
+    ).json();
+    // primary 와 verified 둘 다 true인 email을 찾아야 한다.
+    const emailObj = emailData.find(
+      (email) => (email.primary === true) & (email.verified === true)
+    );
+    if (!emailObj) {
+      return res.redirect("/login");
+    }
+
+    const existingUser = await User.findOne({ email: emailObj.email });
+    if (existingUser) {
+      // 해당 email을 가진 user가 이미 있다면 그 user가 전에 GitHub으로 로그인했든, password로 계정을 생성했든 신경쓰지 않고 로그인 시켜줌
+      req.session.loggedIn = true;
+      req.session.user = existingUser;
+      return res.redirect("/");
+    } else {
+      // 해당 email로 user가 없으니까 계정을 새로 생성
+      const user = await User.create({
+        name: userData.name,
+        username: userData.login,
+        email: emailObj.email,
+        password: "",
+        socialOnly: true,
+        location: userData.location,
+      });
+      req.session.loggedIn = true;
+      req.session.user = user;
+      return res.redirect("/");
+    }
   } else {
     return res.redirect("/login");
   }
