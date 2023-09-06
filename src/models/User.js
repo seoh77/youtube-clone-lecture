@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 
 const userSchema = new mongoose.Schema({
   email: { type: String, required: true, unique: true }, // unique를 사용해서 중복이 되지 않도록 설정
+  avatarUrl: String,
   socialOnly: { type: Boolean, default: false },
   username: { type: String, required: true, unique: true },
   password: { type: String },
