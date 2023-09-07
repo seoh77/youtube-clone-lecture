@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { mongo } from "mongoose";
 
 // model의 형태 정의 (데이터 형식 지정) = schema
 const videoSchema = new mongoose.Schema({
@@ -10,6 +10,12 @@ const videoSchema = new mongoose.Schema({
   meta: {
     views: { type: Number, default: 0, required: true },
     rating: { type: Number, default: 0, required: true },
+  },
+  // Video Model과 User Model을 연결하는 작업 (id를 가지고)
+  owner: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true,
+    ref: "User",
   },
 });
 
