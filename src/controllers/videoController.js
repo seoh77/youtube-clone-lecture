@@ -22,20 +22,32 @@ export const watch = async (req, res) => {
 // getEdit : 화면에 보여주는 역할
 export const getEdit = async (req, res) => {
   const { id } = req.params;
+  const {
+    user: { _id },
+  } = req.session;
   const video = await Video.findById(id);
   if (!video) {
     return res.status(404).render("404", { pageTitle: "Video not found." });
+  }
+  if (String(video.owner) !== String(_id)) {
+    return res.status(403).redirect("/");
   }
   return res.render("edit", { pageTitle: `Edit: ${video.title}`, video });
 };
 
 // postEdit : 변경사항을 저장해주는 역할
 export const postEdit = async (req, res) => {
+  const {
+    user: { _id },
+  } = req.session;
   const { id } = req.params;
   const { title, description, hashtags } = req.body;
   const video = await Video.exists({ _id: id }); // 굳이 모든 Video를 가져와 검색하지 않고 exists(조건)함수를 사용하면 간단하게 처리할 수 있다.
   if (!video) {
     return res.status(404).render("404", { pageTitle: "Video not found." });
+  }
+  if (String(video.owner) !== String(_id)) {
+    return res.status(403).redirect("/");
   }
   await Video.findByIdAndUpdate(id, {
     title,
@@ -79,6 +91,16 @@ export const postUpload = async (req, res) => {
 
 export const deleteVideo = async (req, res) => {
   const { id } = req.params;
+  const {
+    user: { _id },
+  } = req.session;
+  const video = await Video.findById(id);
+  if (!video) {
+    return res.status(404).render("404", { pageTitle: "Video not found." });
+  }
+  if (String(video.owner) !== String(_id)) {
+    return res.status(403).redirect("/");
+  }
   await Video.findByIdAndDelete(id);
   // findOneAndDelete와 findOneAndRemove는 약간 다른점이 있긴 하지만, 쓰면 안 되는 특별한 이유가 있지 않는 이상 findOneAndDelete를 사용한다.
   // findByIdAndDelete(id)는 findOneAndDelete({_id:id})를 간단하게 줄인 것이다.
