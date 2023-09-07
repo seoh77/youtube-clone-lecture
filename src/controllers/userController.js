@@ -220,10 +220,9 @@ export const postChangePassword = async (req, res) => {
 export const see = async (req, res) => {
   // user 본인 뿐만 아니라 누구나 볼 수 있도록 만들어야 하기 때문에 req.session.user._id로 id를 가져오지 않고, url에서 id를 가져온다.
   const { id } = req.params;
-  const user = await User.findById(id);
+  const user = await User.findById(id).populate("videos");
   if (!user) {
     return res.status(404).render("404", { pageTitle: "User not found." });
   }
-  const videos = await Video.find({ owner: user._id });
-  return res.render("users/profile", { pageTitle: user.name, user, videos });
+  return res.render("users/profile", { pageTitle: user.name, user });
 };
