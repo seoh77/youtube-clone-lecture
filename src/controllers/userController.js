@@ -160,19 +160,22 @@ export const getEdit = (req, res) => {
 export const postEdit = async (req, res) => {
   const {
     session: {
-      user: { _id },
+      user: { _id, avatarUrl },
     },
     body: { name, email, username, location },
+    file,
   } = req; // const id = req.session.user.id; const { name, email, username, location } = req.body; 두 줄을 적는 것과 위의 방식은 동일
+  console.log(file);
   const updatedUser = await User.findByIdAndUpdate(
     _id,
     {
+      avatarUrl: file ? file.path : avatarUrl, // user가 file을 업로드 하면 file path로 avatar를 변경하고, file을 업로드 하지 않으면 기존 avatar을 그대로 유지
       name,
       email,
       username,
       location,
     },
-    { new: ture } // new:ture를 설정해줘야 findByIdAndUpdate가 업데이트 된 데이터를 return 해준다.
+    { new: true } // new:true를 설정해줘야 findByIdAndUpdate가 업데이트 된 데이터를 return 해준다.
   );
   req.session.user = updatedUser;
   return res.redirect("/users/edit");
