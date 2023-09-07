@@ -15,7 +15,9 @@ const userSchema = new mongoose.Schema({
 // save(저장)하기 전에 비밀번호를 해싱하는 과정
 userSchema.pre("save", async function () {
   // 여기서 this는 새로 creat되는 user을 가리킨다.
-  this.password = await bcrypt.hash(this.password, 5); // 5는 5번 해싱을 진행한다는 것을 의미
+  if (this.isModified("password")) {
+    this.password = await bcrypt.hash(this.password, 5); // 5는 5번 해싱을 진행한다는 것을 의미
+  }
 });
 
 const User = mongoose.model("User", userSchema);
