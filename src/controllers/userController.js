@@ -157,8 +157,25 @@ export const getEdit = (req, res) => {
   return res.render("edit-profile", { pageTitle: "Edit Profile" });
 };
 
-export const postEdit = (req, res) => {
-  return res.render("edit-profile");
+export const postEdit = async (req, res) => {
+  const {
+    session: {
+      user: { _id },
+    },
+    body: { name, email, username, location },
+  } = req; // const id = req.session.user.id; const { name, email, username, location } = req.body; 두 줄을 적는 것과 위의 방식은 동일
+  const updatedUser = await User.findByIdAndUpdate(
+    _id,
+    {
+      name,
+      email,
+      username,
+      location,
+    },
+    { new: ture } // new:ture를 설정해줘야 findByIdAndUpdate가 업데이트 된 데이터를 return 해준다.
+  );
+  req.session.user = updatedUser;
+  return res.redirect("/users/edit");
 };
 
 export const see = (req, res) => res.send("See User");
