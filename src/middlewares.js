@@ -25,4 +25,17 @@ export const publicOnlyMiddleware = (req, res, next) => {
   }
 };
 
-export const uploadFiles = multer({ dest: "uploads/" });
+export const avatarUpload = multer({
+  dest: "uploads/avatars/",
+  limits: {
+    fileSize: 3000000,
+  },
+});
+export const videoUpload = multer({
+  dest: "uploads/videos/",
+  limits: {
+    fileSize: 10000000,
+  },
+});
+
+// limits: { fileSize : } 를 통해 해당 용량보다 큰 파일은 업로드가 불가능하도록 설정

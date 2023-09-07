@@ -49,11 +49,13 @@ export const getUpload = (req, res) => {
 };
 
 export const postUpload = async (req, res) => {
+  const { path: fileUrl } = req.file;
   const { title, description, hashtags } = req.body;
   try {
     await Video.create({
       title, // title : title 로 적는 것과 같은 의미다.
       description,
+      fileUrl,
       hashtags: Video.formatHashtags(hashtags),
     });
     return res.redirect("/");
