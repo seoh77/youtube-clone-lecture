@@ -2,7 +2,9 @@ import Video from "../models/Video";
 import User from "../models/User";
 
 export const home = async (req, res) => {
-  const videos = await Video.find({}).sort({ createdAt: "asc" }); // sort를 추가해서 정렬 방법을 설정할 수 있다. asc(오름차순) / desc(내림차순)
+  const videos = await Video.find({})
+    .sort({ createdAt: "desc" })
+    .populate("owner");
   return res.render("home", { pageTitle: "Home", videos });
 };
 
@@ -117,7 +119,7 @@ export const search = async (req, res) => {
         // $regex: new RegExp(keyword)를 사용함으로써 keyword를 포함한 단어는 모두 검색 된다.
         // 여기서 i는 대문자와 소문자를 구분하지 않도록 한다. (Weclome이나 weclome이나 모두 검색되도록)
       },
-    });
+    }).populate("owner");
   }
   return res.render("search", { pageTitle: "Search", videos });
 };
