@@ -4,15 +4,21 @@
 // 1. entry (= 우리가 처리하고자 하는 파일들) 의 경로 적어주기
 // 2. output (= 결과물) 의 파일명과 경로 설정
 
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const path = require("path");
 
 module.exports = {
   entry: "./src/client/js/main.js", // 우리가 변경하고자 하는 파일의 경로를 적어주면 된다.
+  plugins: [
+    new MiniCssExtractPlugin({
+      filename: "css/styles.css",
+    }),
+  ],
   mode: "development", // webpack에게 아직 코드가 개발 중임으로 알려줌 (따로 설정해주지 않으면 production mode로 설정되고, 코드를 전부 압축시킴)
   output: {
     // 결과물을 위한 파일명과 경로 설정
-    filename: "main.js",
-    path: path.resolve(__dirname, "assets", "js"), // 여기서 path는 절대경로로 적어줘야 한다.
+    filename: "js/main.js",
+    path: path.resolve(__dirname, "assets"), // 여기서 path는 절대경로로 적어줘야 한다.
     // dirname(=directory name)은 파일까지의 경로 전체를 말한다.
     // path.resolve()는 괄호 안에 있는 내용들을 묶어서 하나의 경로로 만들어 준다.
     // 예를 들어 path.resolve(__dirname, "assets", "js")는 '/Users/seoh/Desktop/study/nomad-web-study/youtube-clone/assets/js'가 된다.
@@ -31,7 +37,7 @@ module.exports = {
       },
       {
         test: /\.scss$/,
-        use: ["style-loader", "css-loader", "sass-loader"],
+        use: [MiniCssExtractPlugin.loader, "css-loader", "sass-loader"],
         // 제일 마지막에 있는 'sass-loader'가 webpack이 가장 먼저 사용할 loader
       },
     ],
