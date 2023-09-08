@@ -7,8 +7,8 @@
     "url": "git+https://github.com/seoh77/youtube-clone-lecture.git"
   },
   "scripts": {
-    "dev": "nodemon --exec babel-node src/init.js",
-    "assets": "webpack --config webpack.config.cjs"
+    "dev:server": "nodemon",
+    "dev:assets": "webpack"
   },
   "author": "SeoH",
   "license": "MIT",
