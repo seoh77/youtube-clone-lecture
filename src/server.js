@@ -31,6 +31,7 @@ app.use(
 app.use(localMiddleware); // localMiddleware은 반드시 session middleware 뒤에 와야 정상적으로 session object에 접근할 수 있다.
 app.use("/uploads", express.static("uploads")); // Express에게 만약 누군가 /uploads로 가려고 한다면, uploads 폴더의 내용을 보여주라고 설정 (이걸 안하면 404에러가 뜸)
 // 위 방식의 문제점 : 서버에 파일을 저장하므로 서버가 종료되면 파일이 사라진다. -> 나중에는 파일을 우리 서버에 저장하는 것이 아니라 다른 곳에 저장하는 방식으로 수정할 것이다.
+app.use("/static", express.static("assets"));
 
 app.use("/", globalRouter);
 app.use("/videos", videoRouter); // 누군가가 "/videos"로 시작하는 url에 접근하면 videoRouter에 있는 컨트롤러를 찾게 하는 역할
