@@ -8,7 +8,11 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const path = require("path");
 
 module.exports = {
-  entry: "./src/client/js/main.js", // 우리가 변경하고자 하는 파일의 경로를 적어주면 된다.
+  entry: {
+    // 우리가 변경하고자 하는 파일의 경로를 적어주면 된다.
+    main: "./src/client/js/main.js",
+    videoPlayer: "./src/client/js/videoPlayer.js",
+  },
   mode: "development", // webpack에게 아직 코드가 개발 중임으로 알려줌 (따로 설정해주지 않으면 production mode로 설정되고, 코드를 전부 압축시킴)
   watch: true, // 이 부분을 추가해주면 npm run assets를 한 번만 실행시켜도 종료되지 않고 계속 남아있으며 변경 사항이 생기면 refresh와 compile을 다시 해준다.
   plugins: [
@@ -18,7 +22,7 @@ module.exports = {
   ],
   output: {
     // 결과물을 위한 파일명과 경로 설정
-    filename: "js/main.js",
+    filename: "js/[name].js", // [name]이라고 적어주면, entry에 있는 이름을 그대로 가져간다.
     path: path.resolve(__dirname, "assets"), // 여기서 path는 절대경로로 적어줘야 한다.
     // dirname(=directory name)은 파일까지의 경로 전체를 말한다.
     // path.resolve()는 괄호 안에 있는 내용들을 묶어서 하나의 경로로 만들어 준다.
