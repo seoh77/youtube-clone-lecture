@@ -13,7 +13,6 @@ export const watch = async (req, res) => {
   // findOne : 입력한 모든 조건을 적용시켜서 조건을 충족하는 요소를 찾을 수 있다.  -> 예를 들어 조회수가 25인 영상을 찾아라
   // findById : id로 해당 요소를 찾아낼 수 있는 기능
   const video = await Video.findById(id).populate("owner"); // populate는 실제 User 데이터로 채워주는 역할을 한다.
-  console.log(video);
   if (!video) {
     return res.status(404).render("404", { pageTitle: "Video not found." });
     // video가 null이면 여기서 실행을 멈춰야 하니끼 꼭 앞에 return을 붙여야 한다. 안 그러면 그 밑에 코드들도 이어서 실행시킨다.
