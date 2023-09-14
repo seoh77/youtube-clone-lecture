@@ -3,6 +3,8 @@ const playBtn = document.getElementById("play");
 const muteBtn = document.getElementById("mute");
 const time = document.getElementById("time");
 const volumeRange = document.getElementById("volume");
+const currenTime = document.getElementById("currenTime");
+const totalTime = document.getElementById("totalTime");
 
 let volumeValue = 0.5;
 
@@ -44,9 +46,27 @@ const handleVolumeChange = (event) => {
   video.volume = value; // 비디오의 볼륨을 바꾸는 역할
 };
 
+// Date()를 사용해서 00:00:00 format 만들기
+const formatTime = (seconds) =>
+  new Date(seconds * 1000).toISOString().substr(11, 8);
+
+const handleLoadedMetadata = () => {
+  totalTime.innerText = formatTime(Math.floor(video.duration)); // video.duration : video의 전체 길이 가져오기
+};
+
+const handleTimeUpdate = () => {
+  currenTime.innerText = formatTime(Math.floor(video.currentTime));
+};
+
+// 첫번째 방법
 // playBtn.addEventListener("click", handlePlayClick);
-playBtn.onclick = handlePlayClick;
 // muteBtn.addEventListener("click", handleMuteClick);
-muteBtn.onclick = handleMuteClick;
 // volumeRange.addEventListener("change", handleVolumeChange);
+
+// 두번째 방법
+playBtn.onclick = handlePlayClick;
+muteBtn.onclick = handleMuteClick;
 volumeRange.onchange = handleVolumeChange;
+
+video.addEventListener("loadedmetadata", handleLoadedMetadata);
+video.addEventListener("timeupdate", handleTimeUpdate); // 비디오 시간이 업데이트 될 때마다 JS가 해당 이벤트를 실행
