@@ -5,6 +5,7 @@ const time = document.getElementById("time");
 const volumeRange = document.getElementById("volume");
 const currenTime = document.getElementById("currenTime");
 const totalTime = document.getElementById("totalTime");
+const timeline = document.getElementById("timeline");
 
 let volumeValue = 0.5;
 
@@ -52,21 +53,31 @@ const formatTime = (seconds) =>
 
 const handleLoadedMetadata = () => {
   totalTime.innerText = formatTime(Math.floor(video.duration)); // video.duration : video의 전체 길이 가져오기
+  timeline.max = Math.floor(video.duration);
 };
 
 const handleTimeUpdate = () => {
   currenTime.innerText = formatTime(Math.floor(video.currentTime));
+  timeline.value = Math.floor(video.currentTime);
+};
+
+const handleTimelineChange = (event) => {
+  const {
+    target: { value },
+  } = event;
+  video.currentTime = value;
 };
 
 // 첫번째 방법
 // playBtn.addEventListener("click", handlePlayClick);
 // muteBtn.addEventListener("click", handleMuteClick);
-// volumeRange.addEventListener("change", handleVolumeChange);
+// volumeRange.addEventListener("input", handleVolumeChange);
 
 // 두번째 방법
 playBtn.onclick = handlePlayClick;
 muteBtn.onclick = handleMuteClick;
-volumeRange.onchange = handleVolumeChange;
+volumeRange.oninput = handleVolumeChange;
 
 video.addEventListener("loadedmetadata", handleLoadedMetadata);
 video.addEventListener("timeupdate", handleTimeUpdate); // 비디오 시간이 업데이트 될 때마다 JS가 해당 이벤트를 실행
+timeline.addEventListener("input", handleTimelineChange);
