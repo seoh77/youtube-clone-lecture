@@ -9,8 +9,8 @@ const handleDownload = () => {
   const a = document.createElement("a");
   a.href = videoFile;
   a.download = "MyRecording.webm"; // 다운로드 할 포맷도 지정해주기
-  document.body.appendChild(a);
-  a.click();
+  document.body.appendChild(a); // body에 존재하지 않는 링크는 클릭할 수 없기 때문에 링크를 body에 추가하는 단계는 필수
+  a.click(); // user 대신 클릭해줌
 };
 
 const handleStop = () => {
@@ -39,6 +39,8 @@ const handelStart = () => {
 };
 
 const init = async () => {
+  // getUserMedia는 mediaDevices 객체의 함수로 마이크, 카메라와 같은 미디어 장비들에 접근할 수 있게 한다.
+  // 이런 것들이 return 해주는 것은 stream이다. (stream은 우리가 어딘가에 넣어둘 0과 1로 이루어진 데이터를 의미한다.)
   stream = await navigator.mediaDevices.getUserMedia({
     audio: false,
     video: true,
