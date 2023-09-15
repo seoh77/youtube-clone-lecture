@@ -110,6 +110,14 @@ const handleMouseLeave = () => {
   controlsTimeout = setTimeout(hideControls, 3000); // 3000 = 3초
 };
 
+const handleEnded = () => {
+  // "/api/videos/:id/view"에 요청해야 하므로 video id를 가져와야 한다.
+  //   => HTML element에 커스텀 데이터를 저장할 수 있어야 한다. (video id를 HTML 어딘가에 저장)
+  const { id } = videoContainer.dataset;
+  fetch(`/api/videos/${id}/view`, { method: "POST" });
+  // fetch(`/api/videos/${id}/view`)로만 사용하면 GET 요청을 보내게 된다. 여기서는 POST 요청을 보내야 한다.
+};
+
 playBtn.addEventListener("click", handlePlayClick);
 muteBtn.addEventListener("click", handleMuteClick);
 volumeRange.addEventListener("input", handleVolumeChange);
@@ -121,3 +129,5 @@ fullScreenBtn.addEventListener("click", handleFullScreen);
 
 videoContainer.addEventListener("mousemove", handleMouseMove);
 videoContainer.addEventListener("mouseleave", handleMouseLeave);
+
+video.addEventListener("ended", handleEnded);

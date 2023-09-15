@@ -122,3 +122,16 @@ export const search = async (req, res) => {
   }
   return res.render("search", { pageTitle: "Search", videos });
 };
+
+export const registerView = async (req, res) => {
+  const { id } = req.params;
+  const video = await Video.findById(id);
+  if (!video) {
+    return res.sendStatus(404);
+    // status만 사용하면 아무것도 return하지 않은 것이다.
+    // 따라서 render을 사용하지 않고 status만 보내고 싶다면 sendStatus를 사용해야 연결을 끝낼 수 있다.
+  }
+  video.meta.views = video.meta.views + 1;
+  await video.save();
+  return res.sendStatus(200);
+};

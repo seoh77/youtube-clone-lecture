@@ -6,6 +6,7 @@ import globalRouter from "./routers/rootRouter";
 import videoRouter from "./routers/videoRouter";
 import userRouter from "./routers/userRouter";
 import { localMiddleware } from "./middlewares";
+import apiRouter from "./routers/apiRouter";
 
 const app = express();
 const logger = morgan("dev");
@@ -36,6 +37,8 @@ app.use("/static", express.static("assets"));
 app.use("/", globalRouter);
 app.use("/videos", videoRouter); // 누군가가 "/videos"로 시작하는 url에 접근하면 videoRouter에 있는 컨트롤러를 찾게 하는 역할
 app.use("/users", userRouter);
+
+app.use("/api", apiRouter);
 
 export default app;
 // server.js는 express된 것들과 sever의 configuration에 관련된 코드만 처리해주기 위해서 init.js와 나눠서 정리해줌
