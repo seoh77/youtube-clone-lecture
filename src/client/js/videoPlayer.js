@@ -17,7 +17,6 @@ let controlsMovementTimeout = null;
 video.volume = volumeValue;
 
 const handlePlayClick = (e) => {
-  console.log("Play");
   // if the video is playing, pause it
   if (video.paused) {
     video.play();
@@ -29,7 +28,6 @@ const handlePlayClick = (e) => {
 };
 
 const handleMuteClick = (e) => {
-  console.log("Mute");
   if (video.muted) {
     video.muted = false;
   } else {
@@ -40,7 +38,6 @@ const handleMuteClick = (e) => {
 };
 
 const handleVolumeChange = (event) => {
-  console.log("Volume");
   const {
     target: { value },
   } = event;
@@ -108,15 +105,9 @@ const handleMouseLeave = () => {
   controlsTimeout = setTimeout(hideControls, 3000); // 3000 = 3초
 };
 
-// 첫번째 방법
-// playBtn.addEventListener("click", handlePlayClick);
-// muteBtn.addEventListener("click", handleMuteClick);
-// volumeRange.addEventListener("input", handleVolumeChange);
-
-// 두번째 방법
-playBtn.onclick = handlePlayClick;
-muteBtn.onclick = handleMuteClick;
-volumeRange.oninput = handleVolumeChange;
+playBtn.addEventListener("click", handlePlayClick);
+muteBtn.addEventListener("click", handleMuteClick);
+volumeRange.addEventListener("input", handleVolumeChange);
 
 video.addEventListener("loadedmetadata", handleLoadedMetadata);
 video.addEventListener("timeupdate", handleTimeUpdate); // 비디오 시간이 업데이트 될 때마다 JS가 해당 이벤트를 실행
