@@ -12,6 +12,7 @@ module.exports = {
     // 우리가 변경하고자 하는 파일의 경로를 적어주면 된다.
     main: "./src/client/js/main.js",
     videoPlayer: "./src/client/js/videoPlayer.js",
+    recorder: "./src/client/js/recorder.js",
   },
   mode: "development", // webpack에게 아직 코드가 개발 중임으로 알려줌 (따로 설정해주지 않으면 production mode로 설정되고, 코드를 전부 압축시킴)
   watch: true, // 이 부분을 추가해주면 npm run assets를 한 번만 실행시켜도 종료되지 않고 계속 남아있으며 변경 사항이 생기면 refresh와 compile을 다시 해준다.
