@@ -21,20 +21,40 @@ const handleDownload = async () => {
   // "-i"는 input을 의미
   // "-r", "60"은 영상을 초당 60프레임으로 인코딩 해주는 명령어 (=> 더 빠른 영상 인코딩을 가능하게 해준다.)
 
+  await ffmpeg.run(
+    "-i",
+    "recording.webm",
+    "-ss", // "-ss"는 영상의 특정 시간대로 이동할 수 있게 한다.
+    "00:00:01",
+    "-frames:v", // "-frames:v", "1" 은 첫 프레임의 스크린샷을 찍어주는 명령어
+    "1",
+    "thumbnail.jpg"
+  );
+
   const mp4File = ffmpeg.FS("readFile", "output.mp4");
   // output.mp4 파일은 Uint8Array(array of 8-bit unsigned integers) 타입
   // unsigned integers는 양의 정수를 의미한다. (음수는 '-'라는 sign이 있으므로 signed)
 
+  const thumbnFile = ffmpeg.FS("readFile", "thumbnail.jpg");
+
   // binary data를 사용하고 싶다면 buffer를 사용해야 한다.
   const mp4Blob = new Blob([mp4File.buffer], { type: "video/mp4" });
+  const thumbBlob = new Blob([thumbnFile.buffer], { type: "image/jpg" });
 
   const mp4Url = URL.createObjectURL(mp4Blob);
+  const thumbUrl = URL.createObjectURL(thumbBlob);
 
   const a = document.createElement("a");
   a.href = mp4Url;
   a.download = "MyRecording.mp4"; // 다운로드 할 포맷도 지정해주기
   document.body.appendChild(a); // body에 존재하지 않는 링크는 클릭할 수 없기 때문에 링크를 body에 추가하는 단계는 필수
   a.click(); // user 대신 클릭해줌
+
+  const thumbA = document.createElement("a");
+  thumbA.href = thumbUrl;
+  thumbA.download = "MyThumbnail.jpg";
+  document.body.appendChild(thumbA);
+  thumbA.click();
 };
 
 const handleStop = () => {
