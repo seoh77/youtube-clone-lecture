@@ -67,16 +67,22 @@ export const postUpload = async (req, res) => {
   const {
     user: { _id },
   } = req.session;
-  const { path: fileUrl } = req.file;
+
+  // single을 사용했을 때는 req.file로 file을 받아오지만, fields를 쓰면 req.files를 사용한다.
+  // 여기서 req.files는 video와 thumb의 정보를 가진 객체이다.
+  const { video, thumb } = req.files;
+
   const { title, description, hashtags } = req.body;
   try {
     const newVideo = await Video.create({
       title, // title : title 로 적는 것과 같은 의미다.
       description,
-      fileUrl,
+      fileUrl: video[0].path,
+      thumbUrl: thumb[0].path,
       owner: _id,
       hashtags: Video.formatHashtags(hashtags),
     });
+    console.log(thumbUrl);
     const user = await User.findById(_id);
     user.videos.push(newVideo._id);
     user.save();

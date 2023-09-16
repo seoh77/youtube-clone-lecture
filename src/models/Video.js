@@ -4,6 +4,7 @@ import mongoose, { mongo } from "mongoose";
 const videoSchema = new mongoose.Schema({
   title: { type: String, required: true, trim: true, maxLength: 50 },
   fileUrl: { type: String, required: true },
+  thumbUrl: { type: String, required: true },
   description: { type: String, required: true, trim: true, minLength: 5 },
   createdAt: { type: Date, required: true, default: Date.now }, // Date.now()로 적게되면 함수가 바로 실행되니 Date.now라고 적어야 한다. 그러면 mongoose와 MongoDB가 알아서 처리해준다.
   hashtags: [{ type: String, trim: true }],

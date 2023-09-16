@@ -82,19 +82,11 @@ const handleDownload = async () => {
   actionBtn.addEventListener("click", handelStart);
 };
 
-const handleStop = () => {
-  actionBtn.innerText = "Download Recording";
-  actionBtn.removeEventListener("click", handleStop);
-  actionBtn.addEventListener("click", handleDownload);
-  recorder.stop();
-};
-
 const handelStart = () => {
-  actionBtn.innerText = "Stop Recording";
-  // actionBtn을 또 한 번 누르게 되면 handleStop()이 실행되도록 만들기 위해서
-  // 우선 실행되고 있는 click event를 제거하고, handleStop을 실행하는 click event를 추가한다.
+  actionBtn.innerText = "Recording";
+  actionBtn.disabled = true;
+
   actionBtn.removeEventListener("click", handelStart);
-  actionBtn.addEventListener("click", handleStop);
 
   recorder = new MediaRecorder(stream);
   recorder.ondataavailable = (event) => {
@@ -103,8 +95,14 @@ const handelStart = () => {
     video.src = videoFile; // 녹화한 비디오 미리보기
     video.loop = true; // 반복재생
     video.play();
+    actionBtn.innerText = "Download";
+    actionBtn.disabled = false;
+    actionBtn.addEventListener("click", handleDownload);
   };
   recorder.start();
+  setTimeout(() => {
+    recorder.stop();
+  }, 5000); // 영상이 너무 길면 변환하는데 시간이 오래 걸리므로 5초 후에 녹화가 끝나도록 만들었다.
 };
 
 const init = async () => {
@@ -112,7 +110,10 @@ const init = async () => {
   // 이런 것들이 return 해주는 것은 stream이다. (stream은 우리가 어딘가에 넣어둘 0과 1로 이루어진 데이터를 의미한다.)
   stream = await navigator.mediaDevices.getUserMedia({
     audio: false,
-    video: true,
+    video: {
+      width: 1024,
+      height: 576,
+    },
   });
   video.srcObject = stream;
   video.play();

@@ -25,6 +25,8 @@ videoRouter
   .route("/upload")
   .all(protectorMiddleware)
   .get(getUpload)
-  .post(videoUpload.single("video"), postUpload);
+  .post(videoUpload.fields([{ name: "video" }, { name: "thumb" }]), postUpload);
+// upload.pug에서 video와 thumb 2개의 파일을 보내기 때문에 기존에 쓴 single로는 처리할 수 없다.
+// 여러개를 보내기 위해서는 fields를 사용해야 한다.
 
 export default videoRouter;
