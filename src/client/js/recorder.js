@@ -1,3 +1,5 @@
+import { createFFmpeg, fetchFile } from "@ffmpeg/ffmpeg";
+
 const startBtn = document.getElementById("startBtn");
 const video = document.getElementById("preview");
 
@@ -5,10 +7,32 @@ let stream;
 let recorder;
 let videoFile;
 
-const handleDownload = () => {
+const handleDownload = async () => {
+  // 1단계: ffmpeg instance 만들기
+  const ffmpeg = createFFmpeg({ log: true }); // {log: true}를 사용하면 무슨 일이 일어나고 있는지 콘솔에서 확인할 수 있다.
+  await ffmpeg.load(); // 사용자가 소프트웨어를 사용할 것이기 때문에 ffmpeg.load()를 await한다.
+
+  // 2단계: ffmpeg에 파일 만들기
+  // ffmpeg.FS의 method 종류 : readFile, unlink, writeFile
+  ffmpeg.FS("writeFile", "recording.webm", await fetchFile(videoFile)); // writeFile은 가상 컴퓨터에 파일을 생성하는 역할
+
+  await ffmpeg.run("-i", "recording.webm", "-r", "60", "output.mp4");
+  // 가상 컴퓨터에 이미 존재하는 파일을 input으로 받아서 "output.mp4"로 변환
+  // "-i"는 input을 의미
+  // "-r", "60"은 영상을 초당 60프레임으로 인코딩 해주는 명령어 (=> 더 빠른 영상 인코딩을 가능하게 해준다.)
+
+  const mp4File = ffmpeg.FS("readFile", "output.mp4");
+  // output.mp4 파일은 Uint8Array(array of 8-bit unsigned integers) 타입
+  // unsigned integers는 양의 정수를 의미한다. (음수는 '-'라는 sign이 있으므로 signed)
+
+  // binary data를 사용하고 싶다면 buffer를 사용해야 한다.
+  const mp4Blob = new Blob([mp4File.buffer], { type: "video/mp4" });
+
+  const mp4Url = URL.createObjectURL(mp4Blob);
+
   const a = document.createElement("a");
-  a.href = videoFile;
-  a.download = "MyRecording.webm"; // 다운로드 할 포맷도 지정해주기
+  a.href = mp4Url;
+  a.download = "MyRecording.mp4"; // 다운로드 할 포맷도 지정해주기
   document.body.appendChild(a); // body에 존재하지 않는 링크는 클릭할 수 없기 때문에 링크를 body에 추가하는 단계는 필수
   a.click(); // user 대신 클릭해줌
 };
