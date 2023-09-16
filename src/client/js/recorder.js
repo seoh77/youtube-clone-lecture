@@ -55,6 +55,16 @@ const handleDownload = async () => {
   thumbA.download = "MyThumbnail.jpg";
   document.body.appendChild(thumbA);
   thumbA.click();
+
+  // 파일의 링크를 해제 (파일을 계속 가지고 있으면 속도가 느려질 수도 있으므로)
+  ffmpeg.FS("unlink", "recording.webm");
+  ffmpeg.FS("unlink", "output.mp4");
+  ffmpeg.FS("unlink", "thumbnail.jpg");
+
+  // url 삭제
+  URL.revokeObjectURL(mp4Url);
+  URL.revokeObjectURL(thumbUrl);
+  URL.revokeObjectURL(videoFile);
 };
 
 const handleStop = () => {
