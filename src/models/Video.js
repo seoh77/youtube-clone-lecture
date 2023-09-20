@@ -12,6 +12,9 @@ const videoSchema = new mongoose.Schema({
     views: { type: Number, default: 0, required: true },
     rating: { type: Number, default: 0, required: true },
   },
+  comments: [
+    { type: mongoose.Schema.Types.ObjectId, required: true, ref: "Comment" },
+  ],
   // Video Model과 User Model을 연결하는 작업 (id를 가지고)
   owner: {
     type: mongoose.Schema.Types.ObjectId,
