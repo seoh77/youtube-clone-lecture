@@ -17,7 +17,7 @@ const handleSubmit = (event) => {
   // fetch는 JS를 통해서 URL의 변경없이 request를 보낼 수 있게 만든다.
   fetch(`/api/videos/${videoId}/comment`, {
     method: "POST",
-    header: {
+    headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({ text }), // JSON.stringify() : object를 string으로 만들어준다.
