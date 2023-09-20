@@ -22,6 +22,9 @@ const handleSubmit = (event) => {
     },
     body: JSON.stringify({ text }), // JSON.stringify() : object를 string으로 만들어준다.
   });
+
+  // 댓글을 submit한 이후에는 댓글창 초기화
+  textarea.value = "";
 };
 
 // 로그인이 안 되어 있을 경우 form이 없어서 EventListener을 실행할 수 없다고 에러가 뜨기 때문에 form이 있을 경우에만 실행하는 것으로 코드 수정
