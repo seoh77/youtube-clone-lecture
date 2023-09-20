@@ -150,6 +150,7 @@ export const finishGithubLogin = async (req, res) => {
 
 export const logout = (req, res) => {
   req.session.destroy();
+  req.flash("info", "Bye Bye");
   return res.redirect("/");
 };
 
@@ -183,6 +184,7 @@ export const postEdit = async (req, res) => {
 
 export const getChangePassword = (req, res) => {
   if (req.session.user.socialOnly === true) {
+    req.flash("error", "Can't change password.");
     return res.redirect("/");
   }
   return res.render("users/change-password", { pageTitle: "Change Password" });
@@ -212,8 +214,8 @@ export const postChangePassword = async (req, res) => {
   // 어떤 user의 비밀번호를 변경시킬지 알고, 그 user에게 저장해야 save할 때 비밀번호가 hash되는 함수가 정상적으로 작동한다.
   user.password = newPassword;
   await user.save();
-  // send notification
-  return res.redirect("/");
+  req.flash("info", "Password updated");
+  return res.redirect("/users/logout");
 };
 
 export const see = async (req, res) => {

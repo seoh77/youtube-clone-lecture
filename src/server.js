@@ -1,6 +1,7 @@
 import express from "express";
 import morgan from "morgan";
 import session from "express-session";
+import flash from "express-flash";
 import MongoStore from "connect-mongo";
 import globalRouter from "./routers/rootRouter";
 import videoRouter from "./routers/videoRouter";
@@ -35,6 +36,8 @@ app.use(
     store: MongoStore.create({ mongoUrl: process.env.DB_URL }),
   })
 );
+
+app.use(flash()); // flash()가 session에 연결해서 사용자에게 메시지를 남긴다.
 
 app.use(localMiddleware); // localMiddleware은 반드시 session middleware 뒤에 와야 정상적으로 session object에 접근할 수 있다.
 app.use("/uploads", express.static("uploads")); // Express에게 만약 누군가 /uploads로 가려고 한다면, uploads 폴더의 내용을 보여주라고 설정 (이걸 안하면 404에러가 뜸)

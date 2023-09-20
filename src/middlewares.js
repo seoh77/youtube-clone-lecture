@@ -12,6 +12,7 @@ export const protectorMiddleware = (req, res, next) => {
   if (req.session.loggedIn) {
     return next();
   } else {
+    req.flash("error", "Log in first.");
     return res.redirect("/login");
   }
 };
@@ -21,6 +22,8 @@ export const publicOnlyMiddleware = (req, res, next) => {
   if (!req.session.loggedIn) {
     return next();
   } else {
+    // 이전 코드는 그냥 홈화면으로 바로 redirect 시켰는데, 사용자에게 메시지를 함께 보내는 것이 좋을 것 같음 => Flash Message 사용
+    req.flash("error", "Not authorized");
     return res.redirect("/");
   }
 };

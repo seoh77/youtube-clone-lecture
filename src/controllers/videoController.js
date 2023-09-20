@@ -31,6 +31,7 @@ export const getEdit = async (req, res) => {
     return res.status(404).render("404", { pageTitle: "Video not found." });
   }
   if (String(video.owner) !== String(_id)) {
+    req.flash("error", "Not authorized");
     return res.status(403).redirect("/");
   }
   return res.render("edit", { pageTitle: `Edit: ${video.title}`, video });
@@ -48,6 +49,7 @@ export const postEdit = async (req, res) => {
     return res.status(404).render("404", { pageTitle: "Video not found." });
   }
   if (String(video.owner) !== String(_id)) {
+    req.flash("error", "You are not the owner of the video.");
     return res.status(403).redirect("/");
   }
   await Video.findByIdAndUpdate(id, {
@@ -55,6 +57,7 @@ export const postEdit = async (req, res) => {
     description,
     hashtags: Video.formatHashtags(hashtags),
   });
+  req.flash("success", "Changes saved.");
   return res.redirect(`/videos/${id}`);
 };
 
@@ -71,7 +74,6 @@ export const postUpload = async (req, res) => {
   // single을 사용했을 때는 req.file로 file을 받아오지만, fields를 쓰면 req.files를 사용한다.
   // 여기서 req.files는 video와 thumb의 정보를 가진 객체이다.
   const { video, thumb } = req.files;
-
   const { title, description, hashtags } = req.body;
   try {
     const newVideo = await Video.create({
