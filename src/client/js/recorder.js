@@ -82,7 +82,7 @@ const handleDownload = async () => {
   actionBtn.addEventListener("click", handelStart);
 };
 
-const handelStart = () => {
+const handleStart = () => {
   actionBtn.innerText = "Recording";
   actionBtn.disabled = true;
 
@@ -121,4 +121,4 @@ const init = async () => {
 
 init();
 
-actionBtn.addEventListener("click", handelStart);
+actionBtn.addEventListener("click", handleStart);
