@@ -1,7 +1,7 @@
 const videoContainer = document.getElementById("videoContainer");
 const form = document.getElementById("commentForm");
 
-const handleSubmit = (event) => {
+const handleSubmit = async (event) => {
   event.preventDefault(); // from을 전송하면 자동으로 새로고침 되는 event 막기
 
   // 로그인이 안 되어 있다면 form이 존재하지 않아 에러가 나기 때문에 함수 내부에 선언하는 것으로 위치를 변경했다.
@@ -15,7 +15,7 @@ const handleSubmit = (event) => {
   }
 
   // fetch는 JS를 통해서 URL의 변경없이 request를 보낼 수 있게 만든다.
-  fetch(`/api/videos/${videoId}/comment`, {
+  await fetch(`/api/videos/${videoId}/comment`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -25,6 +25,7 @@ const handleSubmit = (event) => {
 
   // 댓글을 submit한 이후에는 댓글창 초기화
   textarea.value = "";
+  window.location.reload(); // 직접 새로고침을 해주면서 댓글이 실시간으로 남겨지는 것처럼 보여준다.
 };
 
 // 로그인이 안 되어 있을 경우 form이 없어서 EventListener을 실행할 수 없다고 에러가 뜨기 때문에 form이 있을 경우에만 실행하는 것으로 코드 수정
