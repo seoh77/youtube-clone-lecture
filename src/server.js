@@ -26,6 +26,9 @@ app.use((req, res, next) => {
 // 아래 middleware가 form을 이해하고 그것들을 자바스크립트로 변형시켜줘서 우리가 사용할 수 있도록 만들어주는 역할을 한다.
 app.use(express.urlencoded({ extended: true }));
 
+// 웹사이트에 request로 들어오는 text를 이해할 수 있도록 만드는 역할을 한다.
+app.use(express.json()); // string을 받아서 json으로 바꿔주는 middleware -> 이를 위해서는 Express에거 json을 보내고 있다고 말해줘야 한다.
+
 // express-session middleware가 사이트로 들어오는 모두를 기억하게 될 것이다. (로그인을 하지 않았더라도)
 // express-session middleware를 router 앞에서 초기화 해줘야 한다.
 app.use(
