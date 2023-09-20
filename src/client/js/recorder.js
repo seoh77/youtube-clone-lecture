@@ -79,14 +79,14 @@ const handleDownload = async () => {
 
   actionBtn.disabled = false;
   actionBtn.innerText = "Record Again";
-  actionBtn.addEventListener("click", handelStart);
+  actionBtn.addEventListener("click", handleStart);
 };
 
 const handleStart = () => {
   actionBtn.innerText = "Recording";
   actionBtn.disabled = true;
 
-  actionBtn.removeEventListener("click", handelStart);
+  actionBtn.removeEventListener("click", handleStart);
 
   recorder = new MediaRecorder(stream);
   recorder.ondataavailable = (event) => {
