@@ -17,8 +17,9 @@ module.exports = {
     recorder: BASE_JS + "recorder.js",
     commentSection: BASE_JS + "commentSection.js",
   },
-  mode: "development", // webpack에게 아직 코드가 개발 중임으로 알려줌 (따로 설정해주지 않으면 production mode로 설정되고, 코드를 전부 압축시킴)
-  watch: true, // 이 부분을 추가해주면 npm run assets를 한 번만 실행시켜도 종료되지 않고 계속 남아있으며 변경 사항이 생기면 refresh와 compile을 다시 해준다.
+  // 배포 단계 이므로 development이 아닌 production으로 실행할 것이다. -> package.json에서 설정
+  // mode: "development", // webpack에게 아직 코드가 개발 중임으로 알려줌 (따로 설정해주지 않으면 production mode로 설정되고, 코드를 전부 압축시킴)
+  // watch: true, // 이 부분을 추가해주면 npm run assets를 한 번만 실행시켜도 종료되지 않고 계속 남아있으며 변경 사항이 생기면 refresh와 compile을 다시 해준다.
   plugins: [
     new MiniCssExtractPlugin({
       filename: "css/styles.css",
