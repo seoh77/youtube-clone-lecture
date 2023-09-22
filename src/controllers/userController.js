@@ -167,6 +167,7 @@ export const postEdit = async (req, res) => {
     file,
   } = req; // const id = req.session.user.id; const { name, email, username, location } = req.body; 두 줄을 적는 것과 위의 방식은 동일
 
+
   const isProduction = process.env.NODE_ENV === "production";
 
   const updatedUser = await User.findByIdAndUpdate(

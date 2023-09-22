@@ -78,7 +78,7 @@ export const postUpload = async (req, res) => {
   const { title, description, hashtags } = req.body;
 
   const isProduction = process.env.NODE_ENV === "production";
-
+  
   try {
     const newVideo = await Video.create({
       title, // title : title 로 적는 것과 같은 의미다.

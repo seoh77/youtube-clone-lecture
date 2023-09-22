@@ -9,6 +9,7 @@ const s3 = new aws.S3({
   },
 });
 
+
 // process.env.NODE_ENV === "production" 라면 Heroku에 있다는 것을 의미
 // 강의에서는 Heroku를 사용하지만 나는 koyeb을 사용해서 배포하였기 때문에 'isHeroku' 변수명을 isProduction으로 변경
 const isProduction = process.env.NODE_ENV === "production";
@@ -18,6 +19,7 @@ const s3ImageUploader = multerS3({
   bucket: "youtube-clone-lecture/images",
   acl: "public-read",
 });
+
 
 const s3VideoUploader = multerS3({
   s3: s3,
@@ -61,6 +63,7 @@ export const avatarUpload = multer({
   },
   storage: isProduction ? s3ImageUploader : undefined,
 });
+
 export const videoUpload = multer({
   dest: "uploads/videos/",
   limits: {

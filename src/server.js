@@ -16,10 +16,29 @@ app.set("view engine", "pug");
 app.set("views", process.cwd() + "/src/views");
 app.use(logger);
 
+// app.use((req, res, next) => {
+//   res.setHeader("Access-Control-Allow-Origin", "*");
+//   res.header(
+//     "Access-Control-Allow-Headers",
+//     "Origin, X-Requested-With, Content-Type, Accept"
+//   );
+//   res.header("Cross-Origin-Embedder-Policy", "credentialless");
+//   res.header("Cross-Origin-Opener-Policy", "same-origin");
+//   next();
+// });
+
 // Uncaught (in promise) ReferenceError: SharedArrayBuffer is not defined 오류가 발생해서 추가
+// app.use((req, res, next) => {
+//   res.header("Cross-Origin-Embedder-Policy", "require-corp");
+//   res.header("Cross-Origin-Opener-Policy", "same-origin");
+//   next();
+// });
 app.use((req, res, next) => {
-  res.header("Cross-Origin-Embedder-Policy", "require-corp");
-  res.header("Cross-Origin-Opener-Policy", "same-origin");
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept"
+  );
   next();
 });
 
