@@ -167,12 +167,13 @@ export const postEdit = async (req, res) => {
     file,
   } = req; // const id = req.session.user.id; const { name, email, username, location } = req.body; 두 줄을 적는 것과 위의 방식은 동일
 
-  const isHeroku = process.env.NODE_ENV === "production";
+
+  const isProduction = process.env.NODE_ENV === "production";
 
   const updatedUser = await User.findByIdAndUpdate(
     _id,
     {
-      avatarUrl: file ? (isHeroku ? file.location : file.path) : avatarUrl, // user가 file을 업로드 하면 file path로 avatar를 변경하고, file을 업로드 하지 않으면 기존 avatar을 그대로 유지
+      avatarUrl: file ? (isProduction ? file.location : file.path) : avatarUrl, // user가 file을 업로드 하면 file path로 avatar를 변경하고, file을 업로드 하지 않으면 기존 avatar을 그대로 유지
       name,
       email,
       username,

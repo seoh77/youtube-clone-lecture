@@ -76,13 +76,15 @@ export const postUpload = async (req, res) => {
   // 여기서 req.files는 video와 thumb의 정보를 가진 객체이다.
   const { video, thumb } = req.files;
   const { title, description, hashtags } = req.body;
-  const isHeroku = process.env.NODE_ENV === "production";
+
+  const isProduction = process.env.NODE_ENV === "production";
+  
   try {
     const newVideo = await Video.create({
       title, // title : title 로 적는 것과 같은 의미다.
       description,
-      fileUrl: isHeroku ? video[0].location : video[0].path,
-      thumbUrl: isHeroku ? thumb[0].location : video[0].path,
+      fileUrl: isProduction ? video[0].location : video[0].path,
+      thumbUrl: isProduction ? thumb[0].location : video[0].path,
       owner: _id,
       hashtags: Video.formatHashtags(hashtags),
     });

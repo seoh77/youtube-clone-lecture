@@ -1,5 +1,5 @@
 import multer from "multer";
-import multers3 from "multer-s3";
+import multerS3 from "multer-s3";
 import aws from "aws-sdk";
 
 const s3 = new aws.S3({
@@ -9,15 +9,19 @@ const s3 = new aws.S3({
   },
 });
 
-const isHeroku = process.env.NODE_ENV === "production";
 
-const s3ImageUploader = multers3({
+// process.env.NODE_ENV === "production" 라면 Heroku에 있다는 것을 의미
+// 강의에서는 Heroku를 사용하지만 나는 koyeb을 사용해서 배포하였기 때문에 'isHeroku' 변수명을 isProduction으로 변경
+const isProduction = process.env.NODE_ENV === "production";
+
+const s3ImageUploader = multerS3({
   s3: s3,
   bucket: "youtube-clone-lecture/images",
   acl: "public-read",
 });
 
-const s3VideoUploader = multers3({
+
+const s3VideoUploader = multerS3({
   s3: s3,
   bucket: "youtube-clone-lecture/videos",
   acl: "public-read",
@@ -27,7 +31,7 @@ export const localMiddleware = (req, res, next) => {
   res.locals.loggedIn = Boolean(req.session.loggedIn);
   res.locals.siteName = "Wetube";
   res.locals.loggedInUser = req.session.user || {};
-  res.locals.isHeroku = isHeroku;
+  res.locals.isProduction = isProduction;
   next();
 };
 
@@ -57,7 +61,7 @@ export const avatarUpload = multer({
   limits: {
     fileSize: 3000000,
   },
-  storage: isHeroku ? s3ImageUploader : undefined,
+  storage: isProduction ? s3ImageUploader : undefined,
 });
 
 export const videoUpload = multer({
@@ -65,7 +69,7 @@ export const videoUpload = multer({
   limits: {
     fileSize: 10000000,
   },
-  storage: isHeroku ? s3VideoUploader : undefined,
+  storage: isProduction ? s3VideoUploader : undefined,
 });
 
 // limits: { fileSize : } 를 통해 해당 용량보다 큰 파일은 업로드가 불가능하도록 설정
