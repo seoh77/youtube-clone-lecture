@@ -9,9 +9,15 @@ const s3 = new aws.S3({
   },
 });
 
-const multerUploader = multerS3({
+const s3ImageUploader = multerS3({
   s3: s3,
-  bucket: "youtube-clone-lecture",
+  bucket: "youtube-clone-lecture/images",
+  acl: "public-read",
+});
+
+const s3VideoUploader = multerS3({
+  s3: s3,
+  bucket: "youtube-clone-lecture/videos",
   acl: "public-read",
 });
 
@@ -48,14 +54,14 @@ export const avatarUpload = multer({
   limits: {
     fileSize: 3000000,
   },
-  storage: multerUploader,
+  storage: s3ImageUploader,
 });
 export const videoUpload = multer({
   dest: "uploads/videos/",
   limits: {
     fileSize: 10000000,
   },
-  storage: multerUploader,
+  storage: s3VideoUploader,
 });
 
 // limits: { fileSize : } 를 통해 해당 용량보다 큰 파일은 업로드가 불가능하도록 설정
