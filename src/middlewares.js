@@ -1,9 +1,33 @@
 import multer from "multer";
+import multers3 from "multer-s3";
+import aws from "aws-sdk";
+
+const s3 = new aws.S3({
+  credentials: {
+    accessKeyId: process.env.AWS_ID,
+    secretAccessKey: process.env.AWS_SECRET,
+  },
+});
+
+const isHeroku = process.env.NODE_ENV === "production";
+
+const s3ImageUploader = multers3({
+  s3: s3,
+  bucket: "youtube-clone-lecture/images",
+  acl: "public-read",
+});
+
+const s3VideoUploader = multers3({
+  s3: s3,
+  bucket: "youtube-clone-lecture/videos",
+  acl: "public-read",
+});
 
 export const localMiddleware = (req, res, next) => {
   res.locals.loggedIn = Boolean(req.session.loggedIn);
   res.locals.siteName = "Wetube";
   res.locals.loggedInUser = req.session.user || {};
+  res.locals.isHeroku = isHeroku;
   next();
 };
 
@@ -33,12 +57,15 @@ export const avatarUpload = multer({
   limits: {
     fileSize: 3000000,
   },
+  storage: isHeroku ? s3ImageUploader : undefined,
 });
+
 export const videoUpload = multer({
   dest: "uploads/videos/",
   limits: {
     fileSize: 10000000,
   },
+  storage: isHeroku ? s3VideoUploader : undefined,
 });
 
 // limits: { fileSize : } 를 통해 해당 용량보다 큰 파일은 업로드가 불가능하도록 설정
