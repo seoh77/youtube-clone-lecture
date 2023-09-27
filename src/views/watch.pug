@@ -3,7 +3,10 @@ extends base
 block content
     //- data attribute를 사용하면 pug가 렌더링할 때 데이터를 저장하도록 만들 수 있다.
     div#videoContainer(data-id=video.id)
-        video(src=video.fileUrl crossorigin)
+        if(!isProduction)
+            video(src="/"+video.fileUrl crossorigin)
+        else
+            video(src=video.fileUrl crossorigin)
         div#videoControls.videoControls
             div.videoControls__play
                 span#play.videoControls__playBtn
