@@ -45,7 +45,7 @@ export const postEdit = async (req, res) => {
   } = req.session;
   const { id } = req.params;
   const { title, description, hashtags } = req.body;
-  const video = await Video.exists({ _id: id }); // 굳이 모든 Video를 가져와 검색하지 않고 exists(조건)함수를 사용하면 간단하게 처리할 수 있다.
+  const video = await Video.findById(id); // 최신 mongoose 버전에서는 exists 메소드가 사라졌음. 따라서 강의에서 진행한 exists가 아닌 findById 사용
   if (!video) {
     return res.status(404).render("404", { pageTitle: "Video not found." });
   }
@@ -78,7 +78,7 @@ export const postUpload = async (req, res) => {
   const { title, description, hashtags } = req.body;
 
   const isProduction = process.env.NODE_ENV === "production";
-  
+
   try {
     const newVideo = await Video.create({
       title, // title : title 로 적는 것과 같은 의미다.

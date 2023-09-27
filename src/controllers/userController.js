@@ -149,7 +149,10 @@ export const finishGithubLogin = async (req, res) => {
 };
 
 export const logout = (req, res) => {
-  req.session.destroy();
+  // req.session.destroy();  --> req.flash를 사용하기 위해서는 session이 필요하기 때문에 아래와 같이 코드를 변경
+  req.session.user = null;
+  res.locals.loggedInUser = req.session.user;
+  req.session.loggedIn = false;
   req.flash("info", "Bye Bye");
   return res.redirect("/");
 };
@@ -166,7 +169,6 @@ export const postEdit = async (req, res) => {
     body: { name, email, username, location },
     file,
   } = req; // const id = req.session.user.id; const { name, email, username, location } = req.body; 두 줄을 적는 것과 위의 방식은 동일
-
 
   const isProduction = process.env.NODE_ENV === "production";
 
