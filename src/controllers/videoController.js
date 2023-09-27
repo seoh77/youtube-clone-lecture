@@ -88,11 +88,10 @@ export const postUpload = async (req, res) => {
       owner: _id,
       hashtags: Video.formatHashtags(hashtags),
     });
-    console.log(thumbUrl);
     const user = await User.findById(_id);
     user.videos.push(newVideo._id);
     user.save();
-    return res.redirect("/");
+    return res.status(201).redirect("/");
   } catch (error) {
     // DB를 저장하는 과정에서 에러가 발생하면 아래 내용이 수행된다.
     return res.status(400).render("upload", {
