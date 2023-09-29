@@ -8,19 +8,25 @@ const addComment = (text, id) => {
   newComment.dataset.id = id;
   newComment.className = "video__comment";
 
+  const div1 = document.createElement("div");
+
   const icon = document.createElement("i");
   icon.className = "fas fa-comment";
 
   const span = document.createElement("span");
   span.innerText = ` ${text}`;
 
+  const div2 = document.createElement("div");
+
   const deleteIcon = document.createElement("span");
   deleteIcon.innerText = "❌";
   deleteIcon.className = "delete__icon";
 
-  newComment.appendChild(icon);
-  newComment.appendChild(span);
-  newComment.appendChild(deleteIcon);
+  newComment.appendChild(div1);
+  div1.appendChild(icon);
+  div1.appendChild(span);
+  newComment.appendChild(div2);
+  div2.appendChild(deleteIcon);
 
   videoComments.prepend(newComment); // append는 댓글 목록 맨 끝에 새로운 댓글이 추가되고, prepend는 목록 맨 처음에 새로운 댓글이 추가된다.
 
@@ -70,7 +76,8 @@ const handleDelete = async (event) => {
   });
 
   if (response.status === 201) {
-    const deleteComment = event.target.parentElement;
+    const iconDiv = event.target.parentElement;
+    const deleteComment = iconDiv.parentElement;
     deleteComment.remove();
   }
 };
