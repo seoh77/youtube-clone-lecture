@@ -1,21 +1,53 @@
 const videoContainer = document.getElementById("videoContainer");
 const form = document.getElementById("commentForm");
+const videoComments = document.querySelector(".video__comment ul");
+const deleteIcon = document.querySelectorAll(".delete__icon");
+
+const handleDelete = async (event) => {
+  const deleteComment = event.target.parentElement;
+
+  const {
+    dataset: { id },
+  } = event.target.parentElement;
+
+  const videoId = videoContainer.dataset.id;
+
+  const respose = await fetch(`/api/videos/${videoId}/comment/delete`, {
+    method: "Delete",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ commend: id }),
+  });
+
+  if (respose.status === 200) {
+    deleteComment.remove();
+  }
+};
 
 const addComment = (text, id) => {
   const videoComments = document.querySelector(".video__comments ul");
   const newComment = document.createElement("li");
   newComment.dataset.id = id;
   newComment.className = "video__comment";
+
   const icon = document.createElement("i");
   icon.className = "fas fa-comment";
+
   const span = document.createElement("span");
   span.innerText = ` ${text}`;
-  const span2 = document.createElement("span");
-  span2.innerText = "❌";
+
+  const deleteIcon = document.createElement("span");
+  deleteIcon.innerText = "❌";
+  deleteIcon.className = "delete__icon";
+
   newComment.appendChild(icon);
   newComment.appendChild(span);
-  newComment.appendChild(span2);
+  newComment.appendChild(deleteIcon);
+
   videoComments.prepend(newComment); // append는 댓글 목록 맨 끝에 새로운 댓글이 추가되고, prepend는 목록 맨 처음에 새로운 댓글이 추가된다.
+
+  deleteIcon.addEventListener("click", handleDelete);
 };
 
 const handleSubmit = async (event) => {
@@ -55,4 +87,8 @@ const handleSubmit = async (event) => {
 // 로그인이 안 되어 있을 경우 form이 없어서 EventListener을 실행할 수 없다고 에러가 뜨기 때문에 form이 있을 경우에만 실행하는 것으로 코드 수정
 if (form) {
   form.addEventListener("submit", handleSubmit); // btn을 클릭하면 form이 전송되기 때문에 btn의 클릭 이벤트를 감지하는 것이 아니라 form의 submit event를 감지해야 한다.
+}
+
+if (deleteIcon) {
+  deleteIcon.forEach((icon) => icon.addEventListener("click", handleDelete));
 }
