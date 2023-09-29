@@ -171,21 +171,33 @@ export const createCommet = async (req, res) => {
 
 export const deleteComment = async (req, res) => {
   const {
-    session: { user },
-    body: { commentId },
+    session: {
+      user: { _id },
+    },
     params: { id },
   } = req;
 
-  const video = await Video.findById(id);
+  const comment = await Comment.findById(id);
 
-  if (!video) {
+  if (!comment) {
     return res.sendStatus(404);
   }
 
-  video.comments = video.comments.filter((id) => id !== commentId);
+  if (String(comment.owner._id) !== String(_id)) {
+    req.flash("error", "You are not the owner of video.");
+    return res.status(403).redirect("/");
+  }
+
+  await Comment.findByIdAndDelete(id);
+
+  const commentsOwner = await User.findById(_id);
+  commentsOwner.comments.pop(id);
+  commentsOwner.save();
+  req.session.user = commentsOwner;
+  const video = await Video.findById(comment.video);
+  video.comments.pop(id);
   video.save();
 
-  await Comment.findByIdAndDelete(commentId);
+  return res.sendStatus(201);
 
-  return res.sendStatus(200);
 };
